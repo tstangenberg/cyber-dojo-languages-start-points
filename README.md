@@ -1,10 +1,10 @@
 
-[![CircleCI](https://circleci.com/gh/cyber-dojo/languages.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages)
+[![CircleCI](https://circleci.com/gh/cyber-dojo/languages.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages-start-points)
 
 Specifies the start-points used to create the languages start-point images
-* [cyberdojo/languages-all](https://hub.docker.com/r/cyberdojo/languages-all)
-* [cyberdojo/languages-common](https://hub.docker.com/r/cyberdojo/languages-common)
-* [cyberdojo/languages-small](https://hub.docker.com/r/cyberdojo/languages-small)
+* [cyberdojo/languages-start-points-all](https://hub.docker.com/r/cyberdojo/languages-start-points-all)
+* [cyberdojo/languages-start-points-common](https://hub.docker.com/r/cyberdojo/languages-start-points-common)
+* [cyberdojo/languages-start-points-small](https://hub.docker.com/r/cyberdojo/languages-start-points-small)
 
 ```bash
 #!/bin/bash
@@ -16,19 +16,19 @@ SCRIPT=cyber-dojo
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT}"
 chmod 700 ./${SCRIPT}
 
-IMAGE_NAME=cyberdojo/languages-all
+IMAGE_NAME=cyberdojo/languages-start-points-all:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/all")
 
-IMAGE_NAME=cyberdojo/languages-common
+IMAGE_NAME=cyberdojo/languages-start-points-common:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}"\
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/common")
 
-IMAGE_NAME=cyberdojo/languages-small
+IMAGE_NAME=cyberdojo/languages-start-points-small:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \

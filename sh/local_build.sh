@@ -8,7 +8,7 @@ readonly SCRIPT_NAME=${ROOT_DIR}/../commander/cyber-dojo
 
 SHA="${SHA_VALUE}" \
    ${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-small \
+    cyberdojo/languages-start-points-small:latest \
       --languages \
         file://${CDL_DIR}/gcc-assert      \
         file://${CDL_DIR}/python-unittest \

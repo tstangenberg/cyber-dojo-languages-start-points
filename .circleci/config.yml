@@ -18,29 +18,25 @@ jobs:
           command: |
             set -e
             #
-            image=cyberdojo/languages-all
+            image=cyberdojo/languages-start-points-all
             docker tag  ${image}:latest ${image}:${CIRCLE_SHA1:0:7}
-            docker tag  ${image}:latest ${image}:beta
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push ${image}:${CIRCLE_SHA1:0:7}
-            docker push ${image}:beta
             docker push ${image}:latest
             #
-            image=cyberdojo/languages-common
+            image=cyberdojo/languages-start-points-common
             docker tag  ${image}:latest ${image}:${CIRCLE_SHA1:0:7}
-            docker tag  ${image}:latest ${image}:beta
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push ${image}:${CIRCLE_SHA1:0:7}
-            docker push ${image}:beta
             docker push ${image}:latest
             #
-            image=cyberdojo/languages-small
+            image=cyberdojo/languages-start-points-small
             docker tag  ${image}:latest ${image}:${CIRCLE_SHA1:0:7}
-            docker tag  ${image}:latest ${image}:beta
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push ${image}:${CIRCLE_SHA1:0:7}
-            docker push ${image}:beta
             docker push ${image}:latest
+            #
+            docker logout
 
   deploy-to-beta:
     docker:

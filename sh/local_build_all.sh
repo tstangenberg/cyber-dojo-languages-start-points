@@ -11,18 +11,18 @@ readonly SCRIPT_NAME=${ROOT_DIR}/../commander/cyber-dojo
 
 SHA="${SHA_VALUE}" \
   ${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-all \
+    cyberdojo/languages-start-points-all:latest \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/all")
 
 SHA="${SHA_VALUE}" \
   ${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-common \
+    cyberdojo/languages-start-points-common:latest \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/common")
 
 SHA="${SHA_VALUE}" \
   ${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-small \
+    cyberdojo/languages-start-points-small:latest \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/small")
