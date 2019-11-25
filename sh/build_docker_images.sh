@@ -7,7 +7,7 @@ readonly SHA_VALUE=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 readonly GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
 readonly REPO_NAME=languages-start-points
 readonly BRANCH_NAME=master
-readonly LANGUAGES_LIST="${GITHUB_ORG}/${REPO_NAME}/${MASTER}/url_list"
+readonly LANGUAGES_LIST="${GITHUB_ORG}/${REPO_NAME}/${BRANCH_NAME}/url_list"
 
 readonly SCRIPT_NAME=cyber-dojo
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo-languages.XXXXXXXXX)
