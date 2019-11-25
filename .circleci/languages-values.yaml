@@ -1,0 +1,50 @@
+
+fullnameOverride: "languages"
+
+replicaCount: 3
+
+service:
+  port: 4524
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "4524"
+
+volumes:
+  - name: languages-tmp-dir
+    emptyDir:
+      medium: Memory
+      sizeLimit: "16Mi"
+
+containers:
+  - name: languages
+    image: cyberdojo/languages-all
+    securityContext:
+      runAsUser: 65534 # nobody
+      fsGroup: 65534 # nobody
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+    volumeMounts:
+      - name: languages-tmp-dir
+        mountPath: /tmp
+        readOnly: false
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+      limits:
+        cpu: 50m
+        memory: 128Mi
+    livenessProbe:
+      path: /alive?
+      port: 4524
+    readinessProbe:
+      path: /ready?
+      port: 4524
+
+envFromSecret: {}
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
