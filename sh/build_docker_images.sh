@@ -19,23 +19,26 @@ cd ${TMP_DIR}
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT_NAME}"
 chmod 700 ./${SCRIPT_NAME}
 
+IMAGE_NAME=cyberdojo/languages-start-points-all:latest
 CYBER_DOJO_LANGUAGES_PORT=4534 \
 SHA="${SHA_VALUE}" \
   ./${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-start-points-all:latest \
+     ${IMAGE_NAME} \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/all")
 
+IMAGE_NAME=cyberdojo/languages-start-points-common:latest
 CYBER_DOJO_LANGUAGES_PORT=4534 \
 SHA="${SHA_VALUE}" \
   ./${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-start-points-common:latest \
+    ${IMAGE_NAME} \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/common")
 
+IMAGE_NAME=cyberdojo/languages-start-points-small:latest
 CYBER_DOJO_LANGUAGES_PORT=4534 \
 SHA="${SHA_VALUE}" \
   ./${SCRIPT_NAME} start-point create \
-    cyberdojo/languages-start-points-small:latest \
+    ${IMAGE_NAME} \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/small")

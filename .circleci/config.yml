@@ -17,11 +17,11 @@ jobs:
           name: Tag docker image
           command: |
             set -e
-            IMAGE=cyberdojo/languages-all
+            IMAGE=cyberdojo/languages-start-points-all
             docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
-            IMAGE=cyberdojo/languages-common
+            IMAGE=cyberdojo/languages-start-points-common
             docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
-            IMAGE=cyberdojo/languages-small
+            IMAGE=cyberdojo/languages-start-points-small
             docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
 
       - run:
@@ -30,15 +30,15 @@ jobs:
             set -e
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             #
-            IMAGE=cyberdojo/languages-all
+            IMAGE=cyberdojo/languages-start-points-all
             docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
             docker push ${IMAGE}:latest
             #
-            IMAGE=cyberdojo/languages-common
+            IMAGE=cyberdojo/languages-start-points-common
             docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
             docker push ${IMAGE}:latest
             #
-            IMAGE=cyberdojo/languages-small
+            IMAGE=cyberdojo/languages-start-points-small
             echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
             docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
             docker push ${IMAGE}:latest
