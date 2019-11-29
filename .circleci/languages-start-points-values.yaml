@@ -16,7 +16,7 @@ volumes:
       sizeLimit: "16Mi"
 
 containers:
-  - name: languages
+  - name: languages-start-points
     image: cyberdojo/languages-start-points-all
     securityContext:
       runAsUser: 65534 # nobody
