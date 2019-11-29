@@ -1,16 +1,16 @@
 
-fullnameOverride: "languages"
+fullnameOverride: "languages-start-points"
 
 replicaCount: 3
 
 service:
-  port: 4524
+  port: 4534
   annotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "4524"
+    prometheus.io/port: "4534"
 
 volumes:
-  - name: languages-tmp-dir
+  - name: languages-start-points-tmp-dir
     emptyDir:
       medium: Memory
       sizeLimit: "16Mi"
@@ -24,7 +24,7 @@ containers:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
     volumeMounts:
-      - name: languages-tmp-dir
+      - name: languages-start-points-tmp-dir
         mountPath: /tmp
         readOnly: false
     resources:
@@ -36,10 +36,10 @@ containers:
         memory: 128Mi
     livenessProbe:
       path: /alive?
-      port: 4524
+      port: 4534
     readinessProbe:
       path: /ready?
-      port: 4524
+      port: 4534
 
 envFromSecret: {}
 

@@ -56,8 +56,8 @@ jobs:
               --install \
               --namespace=beta \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/languages-values.yaml \
-              beta-languages \
+              -f .circleci/languages-start-points-values.yaml \
+              beta-languages-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.3
 
@@ -79,8 +79,8 @@ jobs:
               --install \
               --namespace=prod \
               --set-string containers[0].tag=${CIRCLE_SHA1:0:7} \
-              -f .circleci/languages-values.yaml \
-              prod-languages \
+              -f .circleci/languages-start-points-values.yaml \
+              prod-languages-start-points \
               praqma/cyber-dojo-service \
               --version 0.2.3
 
