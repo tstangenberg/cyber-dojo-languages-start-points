@@ -2,7 +2,6 @@
 set -e
 
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && cd .. && pwd )"
-readonly SHA_VALUE=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 
 readonly GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
 readonly REPO_NAME=languages-start-points
@@ -19,26 +18,23 @@ cd ${TMP_DIR}
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT_NAME}"
 chmod 700 ./${SCRIPT_NAME}
 
+export SHA_VALUE=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
+export CYBER_DOJO_LANGUAGES_PORT=4534
+
 IMAGE_NAME=cyberdojo/languages-start-points-all:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
-SHA="${SHA_VALUE}" \
-  ./${SCRIPT_NAME} start-point create \
-     ${IMAGE_NAME} \
-      --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/all")
+./${SCRIPT_NAME} start-point create \
+   ${IMAGE_NAME} \
+    --languages \
+      $(curl --silent --fail "${LANGUAGES_LIST}/all")
 
 IMAGE_NAME=cyberdojo/languages-start-points-common:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
-SHA="${SHA_VALUE}" \
-  ./${SCRIPT_NAME} start-point create \
-    ${IMAGE_NAME} \
-      --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/common")
+./${SCRIPT_NAME} start-point create \
+  ${IMAGE_NAME} \
+    --languages \
+      $(curl --silent --fail "${LANGUAGES_LIST}/common")
 
 IMAGE_NAME=cyberdojo/languages-start-points-small:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
-SHA="${SHA_VALUE}" \
-  ./${SCRIPT_NAME} start-point create \
-    ${IMAGE_NAME} \
-      --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/small")
+./${SCRIPT_NAME} start-point create \
+  ${IMAGE_NAME} \
+    --languages \
+      $(curl --silent --fail "${LANGUAGES_LIST}/small")

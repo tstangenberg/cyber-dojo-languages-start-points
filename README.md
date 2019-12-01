@@ -16,22 +16,21 @@ SCRIPT=cyber-dojo
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT}"
 chmod 700 ./${SCRIPT}
 
+export CYBER_DOJO_LANGUAGES_PORT=4534
+
 IMAGE_NAME=cyberdojo/languages-start-points-all:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/all")
 
 IMAGE_NAME=cyberdojo/languages-start-points-common:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}"\
       --languages \
         $(curl --silent --fail "${LANGUAGES_LIST}/common")
 
 IMAGE_NAME=cyberdojo/languages-start-points-small:latest
-CYBER_DOJO_LANGUAGES_PORT=4534 \
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \
