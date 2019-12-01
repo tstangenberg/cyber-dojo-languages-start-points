@@ -16,7 +16,7 @@ SCRIPT=cyber-dojo
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT}"
 chmod 700 ./${SCRIPT}
 
-export CYBER_DOJO_LANGUAGES_PORT=4534
+export CYBER_DOJO_LANGUAGES_PORT=4524
 
 IMAGE_NAME=cyberdojo/languages-start-points-all:latest
 ./${SCRIPT} start-point create \
