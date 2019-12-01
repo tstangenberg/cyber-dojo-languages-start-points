@@ -18,7 +18,7 @@ cd ${TMP_DIR}
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT_NAME}"
 chmod 700 ./${SCRIPT_NAME}
 
-export SHA_VALUE=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
+export SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
 export CYBER_DOJO_LANGUAGES_PORT=4524
 
 IMAGE_NAME=cyberdojo/languages-start-points-all:latest
