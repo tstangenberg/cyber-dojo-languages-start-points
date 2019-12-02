@@ -11,30 +11,28 @@ Specifies the start-points used to create the languages start-point images
 set -e
 
 GITHUB_ORG=https://raw.githubusercontent.com/cyber-dojo
-LANGUAGES_LIST="${GITHUB_ORG}/languages-start-points/master/url_list"
+LANGUAGES_START_POINTS="${GITHUB_ORG}/languages-start-points/master/start-points"
 SCRIPT=cyber-dojo
 curl -O --silent --fail "${GITHUB_ORG}/commander/master/${SCRIPT}"
 chmod 700 ./${SCRIPT}
-
-export CYBER_DOJO_LANGUAGES_PORT=4524
 
 IMAGE_NAME=cyberdojo/languages-start-points-all:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/all")
+        $(curl --silent --fail "${LANGUAGES_START_POINTS}/all")
 
 IMAGE_NAME=cyberdojo/languages-start-points-common:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}"\
       --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/common")
+        $(curl --silent --fail "${LANGUAGES_START_POINTS}/common")
 
 IMAGE_NAME=cyberdojo/languages-start-points-small:latest
 ./${SCRIPT} start-point create \
    "${IMAGE_NAME}" \
       --languages \
-        $(curl --silent --fail "${LANGUAGES_LIST}/small")
+        $(curl --silent --fail "${LANGUAGES_START_POINTS}/small")
 ```
 
 ![cyber-dojo.org home page](https://github.com/cyber-dojo/cyber-dojo/blob/master/shared/home_page_snapshot.png)
