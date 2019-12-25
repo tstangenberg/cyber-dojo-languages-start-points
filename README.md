@@ -1,5 +1,5 @@
 
-[![CircleCI](https://circleci.com/gh/cyber-dojo/languages.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages-start-points)
+[![CircleCI](https://circleci.com/gh/cyber-dojo/languages-start-points.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages-start-points)
 
 Specifies the start-points used to create the languages start-point images
 * [cyberdojo/languages-start-points-all](https://hub.docker.com/r/cyberdojo/languages-start-points-all)
