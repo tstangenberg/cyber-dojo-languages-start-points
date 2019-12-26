@@ -6,41 +6,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Build tested docker images
-          command: |
-            set -e
-            ./pipe_build_up_test.sh
-      - run:
-          name: Tag docker images
-          command: |
-            set -e
-            IMAGE=cyberdojo/languages-start-points-all
-            docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
-            IMAGE=cyberdojo/languages-start-points-common
-            docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
-            IMAGE=cyberdojo/languages-start-points-small
-            docker tag ${IMAGE}:latest ${IMAGE}:${CIRCLE_SHA1:0:7}
-
-      - run:
-          name: Publish tagged docker images on dockerhub
-          command: |
-            set -e
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-            #
-            IMAGE=cyberdojo/languages-start-points-all
-            docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
-            docker push ${IMAGE}:latest
-            #
-            IMAGE=cyberdojo/languages-start-points-common
-            docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
-            docker push ${IMAGE}:latest
-            #
-            IMAGE=cyberdojo/languages-start-points-small
-            echo "${DOCKER_PASS}" | docker login -u "${DOCKER_USER}" --password-stdin
-            docker push ${IMAGE}:${CIRCLE_SHA1:0:7}
-            docker push ${IMAGE}:latest
-            #
-            docker logout
+          name: Build image, test it, tag it, publish it
+          command: ./build_test_tag_publish.sh
 
   deploy-to-beta:
     docker:
