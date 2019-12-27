@@ -11,9 +11,9 @@ readonly TAG="${SHA:0:7}"
 build_the_images()
 {
   if on_ci; then
-    cd ${TMP_DIR}
+    cd "${TMP_DIR}"
     curl_script
-    chmod 700 ./$(script_name)
+    chmod 700 $(script_path)
   fi
   build_image all
   build_image common
@@ -23,33 +23,27 @@ build_the_images()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_image()
 {
-  local -r kind="${1}"
+  local -r scope="${1}"
+  local -r urls="$(cat "${ROOT_DIR}/start-points/${scope}")"
   $(script_path) start-point create \
-    $(image_name ${kind}) \
-      --languages \
-        $(language_urls "${kind}")
+    $(image_name "${scope}") --languages "${urls}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 image_name()
 {
-  local -r kind="${1}"
-  echo "cyberdojo/languages-start-points-${kind}"
+  local -r scope="${1}"
+  echo "cyberdojo/languages-start-points-${scope}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 curl_script()
 {
+  local -r raw_github_org=https://raw.githubusercontent.com/cyber-dojo
   local -r repo=commander
   local -r branch=master
-  local -r url="$(github_org)/${repo}/${branch}/$(script_name)"
+  local -r url="${raw_github_org}/${repo}/${branch}/$(script_name)"
   curl -O --silent --fail "${url}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-github_org()
-{
-    echo https://raw.githubusercontent.com/cyber-dojo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -69,21 +63,6 @@ script_path()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-language_urls()
-{
-  local -r kind="${1}"
-  if on_ci; then
-    local -r repo=languages-start-points
-    local -r branch=master
-    local -r url_base="$(github_org)/${repo}/${branch}"
-    local -r urls="$(curl --silent --fail "${url_base}/start-points/${kind}")"
-  else
-    local -r urls="$(cat "${ROOT_DIR}/start-points/${kind}")"
-  fi
-  echo "${urls}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
 tag_the_images()
 {
   tag_image all
@@ -96,9 +75,9 @@ tag_the_images()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 tag_image()
 {
-  local -r kind="${1}"
-  local -r image="$(image_name ${kind})"
-  docker tag ${image}:latest ${image}:${TAG}
+  local -r scope="${1}"
+  local -r image="$(image_name ${scope})"
+  docker tag "${image}:latest" "${image}:${TAG}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -126,10 +105,10 @@ on_ci_publish_tagged_images()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 publish_image()
 {
-  local -r kind="${1}"
-  local -r image="$(image_name ${kind})"
-  docker push ${image}:latest
-  docker push ${image}:${TAG}
+  local -r scope="${1}"
+  local -r image="$(image_name ${scope})"
+  docker push "${image}:latest"
+  docker push "${image}:${TAG}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
