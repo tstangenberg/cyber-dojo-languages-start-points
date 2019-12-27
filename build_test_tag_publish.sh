@@ -25,8 +25,10 @@ build_image()
 {
   local -r scope="${1}"
   local -r urls="$(cat "${ROOT_DIR}/start-points/${scope}")"
-  $(script_path) start-point create \
-    $(image_name "${scope}") --languages "${urls}"
+  export GIT_COMMIT_SHA="${SHA}"
+  $(script_path) start-point create $(image_name "${scope}") \
+    --languages "${urls}"
+  unset GIT_COMMIT_SHA
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
