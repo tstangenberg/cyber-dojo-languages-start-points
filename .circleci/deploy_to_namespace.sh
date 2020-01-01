@@ -1,11 +1,10 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Eeu
 
 readonly NAMESPACE="${1}" # beta | prod
 
 # misc env-vars are in ci context
 
-echo $GCP_K8S_CREDENTIALS > /gcp/gcp-credentials.json
+echo ${GCP_K8S_CREDENTIALS} > /gcp/gcp-credentials.json
 
 gcloud auth activate-service-account \
   "${SERVICE_ACCOUNT}" \

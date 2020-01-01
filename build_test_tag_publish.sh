@@ -1,34 +1,43 @@
-#!/bin/bash
-set -e
+#!/bin/bash -Ee
 
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.languages-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && pwd )"
-readonly SHA=$(cd "${ROOT_DIR}" && git rev-parse HEAD)
-readonly TAG="${SHA:0:7}"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-build_the_images()
+build_test_tag_publish()
 {
-  if on_ci; then
-    cd "${TMP_DIR}"
-    curl_script
-    chmod 700 $(script_path)
+  local -r scope="${1}"
+  local -r image="$(image_name "${scope}")"
+  local -r urls="$(cat "${ROOT_DIR}/start-points/${scope}")"
+  # build
+  export GIT_COMMIT_SHA="$(git_commit_sha)"
+  $(script_path) start-point create "${image}" --languages "${urls}"
+  unset GIT_COMMIT_SH
+  # test
+  local -r sha="$(image_sha "${image}")"
+  assert_equal "$(git_commit_sha)" "${sha}"
+  # tag
+  local -r tag="${sha:0:7}"
+  docker tag "${image}:latest" "${image}:${tag}"
+  echo "tagged with :${tag}"
+  # publish
+  if ! on_ci; then
+    echo 'not on CI so not publishing tagged image'
+  else
+    echo 'on CI so publishing tagged image'
+    # DOCKER_USER, DOCKER_PASS are in ci context
+    echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
+    docker push "${image}:latest"
+    docker push "${image}:${tag}"
+    docker logout
   fi
-  build_image all
-  build_image common
-  build_image small
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-build_image()
+git_commit_sha()
 {
-  local -r scope="${1}"
-  local -r urls="$(cat "${ROOT_DIR}/start-points/${scope}")"
-  export GIT_COMMIT_SHA="${SHA}"
-  $(script_path) start-point create $(image_name "${scope}") \
-    --languages "${urls}"
-  unset GIT_COMMIT_SHA
+  echo "$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -36,6 +45,26 @@ image_name()
 {
   local -r scope="${1}"
   echo "cyberdojo/languages-start-points-${scope}"
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+image_sha()
+{
+  local -r image="${1}"
+  docker run --rm "${image}" sh -c 'echo ${SHA}'
+}
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+assert_equal()
+{
+  local -r expected="${1}"
+  local -r actual="${2}"
+  if [ "${expected}" != "${actual}" ]; then
+    echo ERROR
+    echo "expected:'${expected}'"
+    echo "  actual:'${actual}'"
+    exit 42
+  fi
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -49,12 +78,6 @@ curl_script()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-script_name()
-{
-  echo cyber-dojo
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
 script_path()
 {
   if on_ci; then
@@ -65,21 +88,9 @@ script_path()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-tag_the_images()
+script_name()
 {
-  tag_image all
-  tag_image common
-  tag_image small
-  echo "${SHA}"
-  echo "${TAG}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-tag_image()
-{
-  local -r scope="${1}"
-  local -r image="$(image_name ${scope})"
-  docker tag "${image}:latest" "${image}:${TAG}"
+  echo cyber-dojo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -89,31 +100,11 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-on_ci_publish_tagged_images()
-{
-  if ! on_ci; then
-    echo 'not on CI so not publishing tagged images'
-    return
-  fi
-  echo 'on CI so publishing tagged images'
-  # DOCKER_USER, DOCKER_PASS are in ci context
-  echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-  publish_image all
-  publish_image common
-  publish_image small
-  docker logout
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-publish_image()
-{
-  local -r scope="${1}"
-  local -r image="$(image_name ${scope})"
-  docker push "${image}:latest"
-  docker push "${image}:${TAG}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-build_the_images
-tag_the_images
-on_ci_publish_tagged_images
+if on_ci; then
+  cd "${TMP_DIR}"
+  curl_script
+  chmod 700 $(script_path)
+fi
+build_test_tag_publish all
+build_test_tag_publish common
+build_test_tag_publish small
