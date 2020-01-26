@@ -1,4 +1,4 @@
-#!/bin/bash -Ee
+#!/bin/bash -Eeu
 
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.languages-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
@@ -12,7 +12,7 @@ build_test_tag_publish()
   local -r urls="$(cat "${ROOT_DIR}/start-points/${scope}")"
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(script_path) start-point create "${image}" --languages "${urls}"
+  $(cyber_dojo) start-point create "${image}" --languages "${urls}"
   unset GIT_COMMIT_SH
   # test
   local -r sha="$(image_sha "${image}")"
@@ -68,43 +68,33 @@ assert_equal()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-curl_script()
+cyber_dojo()
 {
-  local -r raw_github_org=https://raw.githubusercontent.com/cyber-dojo
-  local -r repo=commander
-  local -r branch=master
-  local -r url="${raw_github_org}/${repo}/${branch}/$(script_name)"
-  curl -O --silent --fail "${url}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-script_path()
-{
-  if on_ci; then
-    echo "./$(script_name)"
+  local -r name=cyber-dojo
+  if [ -x "$(command -v ${name})" ]; then
+    >&2 echo "Found executable ${name} on the PATH"
+    echo "${name}"
   else
-    echo "${ROOT_DIR}/../commander/$(script_name)"
+    local -r url="https://raw.githubusercontent.com/cyber-dojo/commander/master/${name}"
+    >&2 echo "Did not find executable ${name} on the PATH"
+    >&2 echo "Curling it from ${url}"
+    curl --fail --output "${TMP_DIR}/${name}" --silent "${url}"
+    chmod 700 "${TMP_DIR}/${name}"
+    echo "${TMP_DIR}/${name}"
   fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-script_name()
-{
-  echo cyber-dojo
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 on_ci()
 {
+  set +u
   [ -n "${CIRCLECI}" ]
+  local -r result=$?
+  set -u
+  [ "${result}" == '0' ]
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-if on_ci; then
-  cd "${TMP_DIR}"
-  curl_script
-  chmod 700 $(script_path)
-fi
-build_test_tag_publish all
-build_test_tag_publish common
 build_test_tag_publish small
+build_test_tag_publish common
+build_test_tag_publish all
