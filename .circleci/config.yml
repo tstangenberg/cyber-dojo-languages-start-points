@@ -24,11 +24,31 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Authenticate with gcloud and deploy with helm
+          name: Authenticate with gcloud, deploy with helm to prod
           command: ./.circleci/deploy_to_namespace.sh prod
 
 workflows:
   version: 2
+  nightly:
+    triggers:
+      - schedule:
+          cron: "0 3 * * *"
+          filters:
+            branches:
+              only: [ master ]
+    jobs:
+      - build-image:
+          context: cyberdojo-context
+          filters:
+            branches:
+              only: [ master ]
+      - deploy-to-beta:
+          context: cyberdojo-context
+          requires: [ build-image ]
+      - deploy-to-prod:
+          context: cyberdojo-context
+          requires: [ deploy-to-beta ]
+
   build:
     jobs:
       - build-image:
@@ -39,10 +59,6 @@ workflows:
       - deploy-to-beta:
           context: cyberdojo-context
           requires: [ build-image ]
-      #- approve-to-prod:
-      #    type: approval
-      #    requires: [ deploy-to-beta ]
       - deploy-to-prod:
           context: cyberdojo-context
           requires: [ deploy-to-beta ]
-          # requires: [ approve-to-prod ]
