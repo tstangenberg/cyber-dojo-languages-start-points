@@ -22,3 +22,37 @@ o) pulls _that_ image to get the start_point/
 It may be that we can refactor to use a plain list of docker image names.
 These are then simply pulled and their start_point/ dirs collected together
 (like start-point-base does with its 0/1/2/3/4 index dirs)
+
+This still leaves the problem that java-junit (eg) is split across two
+images, one for the runner, one for the start-point.
+I can't see any way round that unless I drop :latest and start to use
+:sha tags. Eg
+  cyberdojofoundation/java_junit:LSP
+    has manifest.json containing
+       "image_name":"cyberdojofoundation/java_junit:4edf92a"
+
+  cyberdojofoundation/java_junit:4edf92a
+    is an image created from git commit whose 1st 7 sha chars are 4edf92a
+
+Now we could just let image-names such as cyberdojofoundation/java_junit:4edf92a
+get to the runner, which does an auto-pull. This may timeout, but its not bad.
+
+An improvement might be to hook into the deployed /ready? probe of
+languages-start-points and get it to do a one-time only pull of the images.
+Viz, pull all the named images, eg cyberdojofoundation/java_junit:4edf92a
+and when they are all pulled, create a change of state (somehow)
+so its one-time only. Eg, ignoring readonly file-system
+   ready?
+   if (all-pulled file exists)
+      200
+   else
+      pull them all
+      create all-pulled file
+      200
+
+Init-containers are Kubernetes only.
+
+
+Are we guaranteed that
+replicaCount == 3 means we get one per node?
+Or does languages-start-points need to be a daemonSet?
