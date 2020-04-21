@@ -39,4 +39,4 @@ helm upgrade \
   --values .circleci/languages-start-points-values.yaml \
   ${NAMESPACE}-languages-start-points \
   praqma/cyber-dojo-service \
-  --version 0.2.4
+  --version 0.2.5

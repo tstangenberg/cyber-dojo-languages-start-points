@@ -43,7 +43,9 @@ With this you could of course get a 2nd, 3rd etc ready? request from
 k8s while the 1st one is still completing.
 If the ready? probe fails for too long does it enter the crash-loop-backoff?
 
-languages-start-points then need to become a daemonSet.
+languages-start-points then needs to become a daemonSet.
+
+How would this work for a commander started server?
 
 How would this affect start-point creation using the cyber-dojo script?
 At the moment, lcoally, I do things like
