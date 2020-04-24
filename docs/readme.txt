@@ -15,24 +15,43 @@ o) creates its java-junit image as per currently
    eg cyberdojofoundation/java_junit
 o) tags this image with the 1st 7 chars of the git commit sha
    eg cyberdojofoundation/java_junit:4edf92a
-o) creates a _new_ second image which contains _only_ the start_point/ dir
-   eg cyberdojostartpoints/java_junit:4edf92a
-   Its manifest.json contains the tagged cdf image_name as above :4edf92a
-   This image is also tagged to :latest
+o) creates a _new_ second image, in a new org, which contains _only_ the
+   start_point/ dir. eg cyberdojostartpoints/java_junit:4edf92a
+   Its manifest.json contains the 1st language image_name, eg
+     cyberdojofoundation/java_junit:4edf92a
+
+ISSUE: in this new design, does any image also need :latest tagging?.
+I don't think it does.
+
+ISSUE: could there be image updates with the same tag? Ideally not.
+But if there is, the puller will still be needed.
+
+ISSUE: there is a daily CI cron job that recreates the LTF images.
+This will, by default, create an image with a tag that already exists.
+Generally its not a good idea to overwrite an image like that.
+An alternative is to create a new repo, with a new name (with a
+version number in it) whenever the start-point source has to change.
 
 The creation of a new languages-start-points image (in its CI pipe)
-takes a list of plain docker image names, which are all
-cyberdojostartpoints (cdsp) images as above, with :latest tags.
+would then take a list of plain docker image names, which are all
+cyberdojostartpoints (cdsp) images as above, with :sha7 tags.
 Viz, languages-start-points contains just start-points!
 
-This opens up the ability to put a version number (eg java 14) into
+The version number (eg java 14) can go into
 the repo name, the display name, and the image name.
-eg java-14-junit
-   "Java 14, JUnit"
-   cyberdojostartpoints/java_14_junit:4edf92a
+eg repo=cyber-dojo-languages/java-14-junit
+   manifest.json
+     display_name="Java 14, JUnit"
+     image_name="cyberdojostartpoints/java_14_junit:4edf92a"
 
- It would be nice if the languages-start-points container had an API method
- that returned json of all this info which could be displayed by the shas service.
+This new design could run in parallel to the current one for a while.
+Someone has taken cyber-dojo-languages org name on dockerhub.
+So github cyber-dojo-languages would feed into two dockerhub orgs:
+   o) cyberdojostartpoints/java_14_junit:4edf92a
+   o) cyberdojofoundation/java_14_junit:4edf92a
+
+Idea: It would be nice if the languages-start-points container had an API method
+that returned json of all this info which could be displayed by the shas service.
 
 A new languages-start-point image is created by simply pulling all
 the cdsp images and their start_point/ dirs are collected together
