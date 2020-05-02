@@ -8,7 +8,14 @@ an associated image (eg cyberdojofoundation/java_junit). At the moment to do
 this you need to force a deploy on CI to get the start-point and then
 [kubectl exec] into the 3 nodes and [docker pull] the new image.
 
-Possible redesign to solve these issues...
+ISSUE: there is a daily CI cron job that recreates the LTF images.
+This will, by default, create an image with a tag that already exists.
+Generally its not a good idea to overwrite an image like that.
+An alternative is to create a new repo, with a new name (with a
+version number in it) whenever the start-point source has to change.
+
+
+Design notes for splitting manifests off into their own repo...
 
 When, eg, cyber-dojo-languages/java-junit is in its CI pipe it:
 o) creates its java-junit image as per currently
@@ -19,18 +26,6 @@ o) creates a _new_ second image, in a new org, which contains _only_ the
    start_point/ dir. eg cyberdojostartpoints/java_junit:4edf92a
    Its manifest.json contains the 1st language image_name, eg
      cyberdojofoundation/java_junit:4edf92a
-
-ISSUE: in this new design, does any image also need :latest tagging?.
-I don't think it does.
-
-ISSUE: could there be image updates with the same tag? Ideally not.
-But if there is, the puller will still be needed.
-
-ISSUE: there is a daily CI cron job that recreates the LTF images.
-This will, by default, create an image with a tag that already exists.
-Generally its not a good idea to overwrite an image like that.
-An alternative is to create a new repo, with a new name (with a
-version number in it) whenever the start-point source has to change.
 
 The creation of a new languages-start-points image (in its CI pipe)
 would then take a list of plain docker image names, which are all
