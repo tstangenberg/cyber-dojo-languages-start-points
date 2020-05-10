@@ -37,5 +37,75 @@ which has a read_manifests() method.
    However, the tag will have to happen even if you are not on CI.
    It has to work on a local dev loop.
 
-TODO: Do I still need a :latest tag to be pushed?
-TODO: Does puller need a :latest tag?
+//---------------------------------------------------------------
+
+The tag could be added to the manifests image_name when the
+manifest is cached (and then returned) from a start-point service.
+Note this solves the rag-lambda caching problem in runner!!!!
+(As long as images are genuinely immutable)
+Runner can make harvesting the text files an option.
+  An manifest option - required.
+  A run-time option - nice to have. Opens up possibilities for customization.
+
+o) LTF genuine commit => CI creates and pushes image with tag based on commit
+o) LTF cron job => Same, but don't push image. Fail if rag-test FAILS or check-version.sh fails.
+   If passes, do a forced-commit (on its origin repo) to trigger new image with new tag.
+o) start-points-base commit causes CI to create new image
+     this new image saves repo URL and commit sha into dir for each docker-pulled LTF
+     also has a CI cron job which
+        auto-deploys and
+        triggers commits in 2 dependent repos. custom/languages
+          they in turn could trigger commit in 2 associated chooser repos
+Also
+When a new exercise is created then we could send a POST to the runner service
+which would need to be a daemonset. But this would be a nice to have.
+The image would still get pulled (inside runner) on the first use anyway.
+And runner is a replica not a daemonset anyway.
+But...
+there is a difference between creating a custom-start-point and a languages-start-point.
+LSP gcc (base-image)
+      dir/docker and no dir/start_point
+      dir/docker/image_name.json names the image.
+    gcc-assert  (test-framework-image)
+      dir/docker
+      dir/docker/image_name.json ALSO names the image
+      dir/start_point/manifest.json does NOT contain an image_name entry.
+        image-name comes from dir/docker/image_name.json
+CSP Tennis/Round1/manifest.json that DOES not have docker/ dir
+    but more importantly, has manifes.json that does have an image_name entry.
+So now...
+How it seems gcc-assert/docker/Dockerfile has to explicitly name
+the tag on the FROM image.
+So
+ESP: manifest.json
+       must have "display_name"
+       must have "visible_filenames"
+       NO "image_name"
+         image_name taken from mixed-in LSP
+LSP: manifest.json
+       must have "display_name"
+       must have "visible_filenames"
+       must have "filename_extension" <----- this is the only required difference
+       NO "image_name"
+         image_name taken from commit-tag which is used for image tag
+CSP: manifest.json
+       HASH "image_name"
+         tag can be supplied, defaults to :latest
+
+//---------------------------------------------------------------
+
+Now there is no need for puller :)
+Instead what you need re security
+  is a way to prevent an exercise from running if
+   - 1.it is older than a certain age. This seems the simplest default option.
+   - 2.there is a later tag?
+   - 3.it is marked as being a security risk?
+   - 4.other possibilities...
+Implies images know their own creation date.
+
+//---------------------------------------------------------------
+
+Also makes it easy to have a shas page with 2 tabs
+- cyber-dojo for services (as now)
+- cyber-dojo-languages - for LTFs. Could be several entries for an LTF each with a unique tag.
+     each with duration details too. You can see if it is faster or not.
