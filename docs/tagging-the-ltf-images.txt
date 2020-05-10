@@ -61,6 +61,30 @@ When a new exercise is created then we could send a POST to the runner service(S
 which would need to be a daemonset.
 The image would still get pulled (inside runner) on the first use anyway.
 
+
+IF COMMIT MSG CONTAINS [ci skip]
+$ git clone ...
+$ git rev-parse HEAD
+will not give the correct sha
+This can be detected, check for [ci skip] in the commit message at HEAD.
+$ git log -1 --pretty=%B
+Even that is not a guarantee.
+The CI run could fail its tests so there is no image.
+Creation of start-point image (from URLs) should check these.
+Don't want to actually pull the LTF images though.
+I need an API to check if an image with a tag exists.
+https://stackoverflow.com/questions/50937857
+curl \
+    --silent \
+    --fail \
+    -lSL \
+    "https://hub.docker.com/v2/repositories/cyberdojo/shas/tags/9ebc9f6"
+
+This assumes the image is on dockerhub and is public.
+If called for [cyber-dojo start-point create] will need an
+option to override the domain (hub.docker.com)
+
+
 But...
 there is a difference between creating a custom-start-point and a languages-start-point.
 LSP gcc (base-image)
@@ -85,7 +109,7 @@ ESP: manifest.json
 LSP: manifest.json
        must have "display_name"
        must have "visible_filenames"
-       must have "filename_extension" 
+       must have "filename_extension"
          must have "max_seconds"  <--- make this required
          must have "tab_size"     <--- make this required
          "hidden_filenames     # leave as optional to signal text file retrieval
