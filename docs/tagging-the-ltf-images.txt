@@ -85,7 +85,12 @@ ESP: manifest.json
 LSP: manifest.json
        must have "display_name"
        must have "visible_filenames"
-       must have "filename_extension" <----- this is the only required difference
+       must have "filename_extension" <----- this is the only required difference currently.
+         must have "max_seconds"  <--- make this required
+         must have "tab_size"     <--- make this required
+         "hidden_filenames     # leave as optional to signal text file retrieval
+         "progress_regexs"     # leave as optional - for dashboard
+         "highlight_filenames" # leave as optional - for fileknave
        NO "image_name"
          image_name taken from commit-tag which is used for image tag
 CSP: manifest.json
