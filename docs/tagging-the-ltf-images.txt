@@ -57,10 +57,10 @@ o) start-points-base commit causes CI to create new image
         triggers commits in 2 dependent repos. custom/languages
           they in turn could trigger commit in 2 associated chooser repos
 Also
-When a new exercise is created then we could send a POST to the runner service
-which would need to be a daemonset. But this would be a nice to have.
+When a new exercise is created then we could send a POST to the runner service(S)
+which would need to be a daemonset.
 The image would still get pulled (inside runner) on the first use anyway.
-And runner is a replica not a daemonset anyway.
+
 But...
 there is a difference between creating a custom-start-point and a languages-start-point.
 LSP gcc (base-image)
@@ -85,7 +85,7 @@ ESP: manifest.json
 LSP: manifest.json
        must have "display_name"
        must have "visible_filenames"
-       must have "filename_extension" <----- this is the only required difference currently.
+       must have "filename_extension" 
          must have "max_seconds"  <--- make this required
          must have "tab_size"     <--- make this required
          "hidden_filenames     # leave as optional to signal text file retrieval
