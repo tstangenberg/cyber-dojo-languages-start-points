@@ -134,7 +134,63 @@ Implies images know their own creation date.
 
 //---------------------------------------------------------------
 
+Puller needs to be an external service.
+Once there is proper tagging of LTF images use a 24 hour
+cron job on CI that
+  - builds the start-point-image whose manifests will all take the latest :tag
+  - auto deploys the start-points image
+
+//---------------------------------------------------------------
+
 Also makes it easy to have a shas page with 2 tabs
 - cyber-dojo for services (as now)
 - cyber-dojo-languages - for LTFs. Could be several entries for an LTF each with a unique tag.
      each with duration details too. You can see if it is faster or not.
+
+//---------------------------------------------------------------
+
+$ cyber-dojo start-point create
+This takes _repo_ URls and not image names?
+What if the images were split into 2
+  - one for the start-point
+  - one for the LTF
+  - but their TAGs were somehow linked?
+  - need a way to specify 2 image names in the repo, start-point and repo
+  - start-point manifest.json holds image-name for the _LTF_
+  - so the missing image-name is the one for the _START_POINT_
+  - create command would
+    o) docker run --rm ${IMAGE} sh -c 'echo ${SHA}'
+    o) this gets the SHA == commit == tag (of successful commit, and of _both_ images (SP/LTF)
+    o) Now need to get the start-point itself from the image. (Used to be in the git cloned repo)
+    o) Docker tar-pipe it out!
+    o) Now manifest.json will hold LTF-image-name, SHA will give TAG
+       The built service will need to combine these in its cache.
+
+So only feasible for [start-point create] command to do this on images
+if the images are split. It must only operate on SP images. LTF images are too big.
+[start-point create] command already relies on [docker build] command so no
+extra dependency.
+
+Moving forward seems clear I need to support both styles for a while.
+Build the new bridge before removing the old one.
+
+Crucial notion is that each repo contains a manifest.json
+but this cannot hold a tagged image_name if the tag comes
+from the sha of the commit on this repo itself. Chicken and Egg.
+It can only hold a tagless image_name.
+
+So.
+1) repos need to specify image_name for the Start-Point
+2) CI needs to build 2 images and tag them both from commit SHA if they pass tests
+3) $ cyber-dojo start-point create ... needs to be updated to accept image-names
+   Could this be tied in with auto determining the type?
+   No need for --languages
+   $ cyber-dojo start-point create NAME image...
+   Either way, start-point-create.sh can be updated to
+   do both options for a while.
+
+
+Once languages-start-points has tagged image_names (keyed against a display_name)
+it can be asked whether a given [display_name,image_name] is the latest.
+This could be used to help security. Viz, if it, [test] still works.
+If it isn't, it has 2 weeks say?
