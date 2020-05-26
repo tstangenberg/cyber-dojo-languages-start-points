@@ -32,8 +32,8 @@ helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
 
 helm upgrade \
   --install \
-  --namespace="${NAMESPACE}" \
-  --set-string containers[0].image=${IMAGE} \  
+  --namespace=${NAMESPACE} \
+  --set-string containers[0].image=${IMAGE} \
   --set-string containers[0].tag=${TAG} \
   --set service.port=${PORT} \
   --set containers[0].livenessProbe.port=${PORT} \
