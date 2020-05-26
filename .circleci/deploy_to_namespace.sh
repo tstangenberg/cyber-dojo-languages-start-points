@@ -8,8 +8,10 @@
 export $(curl https://raw.githubusercontent.com/cyber-dojo/versioner/master/app/.env)
 
 readonly NAMESPACE="${1}" # beta | prod
+readonly IMAGE=cyberdojo/languages-start-points-all  # special value
 readonly PORT="${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}"
 readonly TAG="${CIRCLE_SHA1:0:7}"
+#
 
 # misc env-vars are in ci context
 
@@ -31,6 +33,7 @@ helm repo add praqma https://praqma-helm-repo.s3.amazonaws.com/
 helm upgrade \
   --install \
   --namespace="${NAMESPACE}" \
+  --set-string containers[0].image=${IMAGE} \  
   --set-string containers[0].tag=${TAG} \
   --set service.port=${PORT} \
   --set containers[0].livenessProbe.port=${PORT} \

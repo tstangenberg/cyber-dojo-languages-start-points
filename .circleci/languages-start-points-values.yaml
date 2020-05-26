@@ -19,7 +19,6 @@ podSecurityContext:
 
 containers:
   - name: languages-start-points
-    image: cyberdojo/languages-start-points-all
     securityContext:
       allowPrivilegeEscalation: false
       readOnlyRootFilesystem: true
