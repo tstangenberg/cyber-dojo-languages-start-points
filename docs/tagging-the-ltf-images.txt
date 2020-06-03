@@ -14,14 +14,14 @@ each repo and stores the commit of its head into a shas.txt like this
   echo -e "${URL_INDEX} \t ${sha} \t ${url}" >> "${CONTEXT_DIR}/shas.txt"
 where URL_INDEX is a simple incrementing integer.
 
-Make each dir got its own sha.txt file (repo url too):
+Make each dir get its own sha.txt file (repo url too):
   echo ${sha} > "${CONTEXT_DIR}/${URL_INDEX}/start_point/sha.txt
   echo ${url} > "${CONTEXT_DIR}/${URL_INDEX}/start_point/url.txt
 
 The cloned repos are COPY'd into the image and the start-points-base image
 has CMD [ "./up.sh" ] which runs a rack-dispatcher. That uses starter.rb
 which has a read_manifests() method.
-1) That could tweak the image_name in each manifest from its sha.txt file...
+1) That tweaks the image_name in each manifest from its sha.txt file...
      sha = IO.read("#{dir}/sha.txt")
      tag = sha[0...7]
      manifest['image_name'] += ":#{tag}"
@@ -112,9 +112,9 @@ LSP: manifest.json
        must have "filename_extension"
          must have "max_seconds"  <--- make this required
          must have "tab_size"     <--- make this required
-         "hidden_filenames     # leave as optional to signal text file retrieval
          "progress_regexs"     # leave as optional - for dashboard
          "highlight_filenames" # leave as optional - for fileknave
+         "hidden_filenames     # DROP
        NO "image_name"
          image_name taken from commit-tag which is used for image tag
 CSP: manifest.json
