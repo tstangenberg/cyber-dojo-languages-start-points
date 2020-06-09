@@ -5,14 +5,14 @@ trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 readonly ROOT_DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-create_test_tag_on_ci_publish()
+build_test_tag_on_ci_publish()
 {
   local -r scope="${1}"
   local -r image="$(image_name "${scope}")"
-  local -r urls="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}")"
+  local -r names="$(cat "${ROOT_DIR}/start-points/image_names.${scope}")"
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(cyber_dojo) start-point create "${image}" --languages "${urls}"
+  $(cyber_dojo) start-point build "${image}" --languages "${names}"
   unset GIT_COMMIT_SH
   # test
   local -r sha="$(image_sha "${image}")"
@@ -91,6 +91,6 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-create_test_tag_on_ci_publish small
-create_test_tag_on_ci_publish common
-create_test_tag_on_ci_publish all
+build_test_tag_on_ci_publish small
+build_test_tag_on_ci_publish common
+build_test_tag_on_ci_publish all
