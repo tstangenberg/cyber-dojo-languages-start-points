@@ -32,11 +32,8 @@ readonly CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE=cyberdojo/languages-start-point
 readonly CYBER_DOJO_LANGUAGES_START_POINTS_TAG="${CIRCLE_SHA1:0:7}"
 
 helm_upgrade \
-   "${NAMESPACE}" \
+   "${NAMESPACE}" "languages-start-points" "praqma/cyber-dojo-service --version 0.2.5" \
    "${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}" \
    "${CYBER_DOJO_LANGUAGES_START_POINTS_TAG}" \
    "${CYBER_DOJO_LANGUAGES_START_POINTS_PORT}" \
-   ".circleci/k8s-general-values.yml" \
-   ".circleci/k8s-specific-values.yml" \
-   "languages-start-points" \
-   "praqma/cyber-dojo-service --version 0.2.5"
+   ".circleci/k8s-general-values.yml"
