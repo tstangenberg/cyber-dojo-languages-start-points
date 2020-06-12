@@ -9,7 +9,7 @@ build_test_tag_on_ci_publish()
 {
   local -r scope="${1}"
   local -r image="$(image_name "${scope}")"
-  local -r names="$(cat "${ROOT_DIR}/start-points/image_names.${scope}")"
+  local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}")"
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
   $(cyber_dojo) start-point build "${image}" --languages "${names}"
