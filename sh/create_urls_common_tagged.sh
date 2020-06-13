@@ -37,7 +37,7 @@ declare -ar urls=(
 
 for i in "${!urls[@]}"; do
   url="${urls[$i]}"
-  cat "${ROOT_DIR}/start-points/git_repo_urls.all.tagged" | grep "${url}" >> "${TMP_FILE}"
+  cat "${ROOT_DIR}/start-points/git_repo_urls.all.tagged" | grep "${url}$" >> "${TMP_FILE}"
 done
 
 cp "${TMP_FILE}" "${ROOT_DIR}/start-points/git_repo_urls.common.tagged"
