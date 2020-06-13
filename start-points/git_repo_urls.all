@@ -1,4 +1,3 @@
-https://github.com/cyber-dojo-languages/asm-assert
 https://github.com/cyber-dojo-languages/bcpl-alltestspassed
 https://github.com/cyber-dojo-languages/bash-bats
 https://github.com/cyber-dojo-languages/bash-shunit2
@@ -55,6 +54,7 @@ https://github.com/cyber-dojo-languages/javascript-jasmine
 https://github.com/cyber-dojo-languages/javascript-mocha-chai-sinon
 https://github.com/cyber-dojo-languages/javascript-qunit-sinon
 https://github.com/cyber-dojo-languages/kotlin-test
+https://github.com/cyber-dojo-languages/nasm-assert
 https://github.com/cyber-dojo-languages/pascal-assert
 https://github.com/cyber-dojo-languages/perl-testsimple
 https://github.com/cyber-dojo-languages/php-unit
@@ -65,7 +65,7 @@ https://github.com/cyber-dojo-languages/python-assert
 https://github.com/cyber-dojo-languages/python-behave
 https://github.com/cyber-dojo-languages/python-pytest
 https://github.com/cyber-dojo-languages/python-unittest
-https://github.com/cyber-dojo-languages/rbase-runit
+https://github.com/cyber-dojo-languages/r-runit
 https://github.com/cyber-dojo-languages/ruby-approval
 https://github.com/cyber-dojo-languages/ruby-cucumber
 https://github.com/cyber-dojo-languages/ruby-minitest
