@@ -20,6 +20,11 @@ function get_latest_tags()
     local sha=$(git rev-parse HEAD)
     local tag=${sha:0:7}
     echo "${tag}@${url}"
+    local commit_msg="$(git log -1 --pretty=%B)"
+    if [[ "${commit_msg}" == *"[ci skip]"* ]] ; then
+      echo "ERROR: [ci skip] in HEAD's commit message"
+      exit 42
+    fi
   done
 }
 
