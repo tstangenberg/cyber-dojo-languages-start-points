@@ -1,7 +1,7 @@
 #!/bin/bash
 
 readonly ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-readonly TMP_FILE=$(mktemp ~/tmp.cyber-dojo.commander.start-point.build.XXXXXX)
+readonly TMP_FILE=$(mktemp ~/tmp.cyber-dojo.languages-start-points.build.XXXXXX)
 remove_tmp_file()
 {
   rm "${TMP_FILE}" > /dev/null
@@ -9,9 +9,9 @@ remove_tmp_file()
 trap remove_tmp_file EXIT
 
 declare -ar urls=(
-  https://github.com/cyber-dojo-languages/gcc-assert
-  https://github.com/cyber-dojo-languages/python-unittest
-  https://github.com/cyber-dojo-languages/ruby-minitest
+  https://github.com/cyber-dojo-start-points/gcc-assert
+  https://github.com/cyber-dojo-start-points/python-unittest
+  https://github.com/cyber-dojo-start-points/ruby-minitest
 )
 
 for i in "${!urls[@]}"; do
