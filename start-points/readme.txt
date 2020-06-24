@@ -8,7 +8,7 @@ Eg
      https://github.com/cyber-dojo-start-points/gcc-googletest
 
 
-$ cyber-dojo start-point build NAME --languages <tag-url>...
+$ cyber-dojo start-point create NAME --languages <tagged-url>...
 Eg
    cyber-dojo start-point build ruby-all --languages \
      0ca1b04@https://github.com/cyber-dojo-start-points/ruby-approval \
@@ -16,8 +16,3 @@ Eg
      f618605@https://github.com/cyber-dojo-start-points/ruby-minitest \
      3371ebc@https://github.com/cyber-dojo-start-points/ruby-rspec    \
      b5e366e@https://github.com/cyber-dojo-start-points/ruby-testunit
-
-
-
-The plan is to merge them so you can use either <url> or <tag-url>
-with the [create] sub-command.

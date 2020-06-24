@@ -12,7 +12,7 @@ build_test_tag_on_ci_publish()
   local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}.tagged")"
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(cyber_dojo) start-point build "${image}" --languages "${names}"
+  $(cyber_dojo) start-point create "${image}" --languages "${names}"
   unset GIT_COMMIT_SH
   # test
   local -r sha="$(image_sha "${image}")"
