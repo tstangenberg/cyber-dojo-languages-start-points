@@ -1,5 +1,5 @@
 
-Currently there are two ways to create a language start-point image:
+There are two ways to create a language start-point image:
 
 $ cyber-dojo start-point create NAME --languages <url>...
 Eg
