@@ -9,18 +9,22 @@ build_test_tag_on_ci_publish()
 {
   local -r scope="${1}"
   local -r image="$(image_name "${scope}")"
-  local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}.tagged")"
+  local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}.tagged" | tr '\n' ' ')"
+
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
   $(cyber_dojo) start-point create "${image}" --languages "${names}"
   unset GIT_COMMIT_SH
+
   # test
   local -r sha="$(image_sha "${image}")"
   assert_equal "$(git_commit_sha)" "${sha}"
+
   # tag
   local -r tag="${sha:0:7}"
   docker tag "${image}:latest" "${image}:${tag}"
   echo "tagged with :${tag}"
+  
   # publish
   if ! on_ci; then
     echo 'not on CI so not publishing tagged image'
