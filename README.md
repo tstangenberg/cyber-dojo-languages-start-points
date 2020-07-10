@@ -6,7 +6,7 @@
 
 ***
 
-The preferred way to create a language start-point image is using tagged urls.
+The preferred way to create a language start-point image is using tagged urls.  
 Eg
 ```bash
    cyber-dojo start-point create ruby-all \
