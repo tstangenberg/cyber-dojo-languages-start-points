@@ -93,4 +93,4 @@ declare -ar URLS=(
 )
 
 echo_tagged_git_repo_urls "${TMP_DIR}" "${TMP_FILE}" "${URLS[@]}"
-cp "${TMP_FILE}" "${MY_DIR}/../start-points/git_repo_urls.all.tagged"
+cp "${TMP_FILE}" "${MY_DIR}/../git_repo_urls.tagged"

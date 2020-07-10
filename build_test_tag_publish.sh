@@ -8,41 +8,7 @@ trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 build_test_tag_on_ci_publish()
 {
   local -r image=cyberdojo/languages-start-points
-  local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.tagged" | tr '\n' ' ')"
-
-  # build
-  export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(cyber_dojo) start-point create "${image}" --languages "${names}"
-  unset GIT_COMMIT_SH
-
-  # test
-  local -r sha="$(image_sha "${image}")"
-  assert_equal "$(git_commit_sha)" "${sha}"
-
-  # tag
-  local -r tag="${sha:0:7}"
-  docker tag "${image}:latest" "${image}:${tag}"
-  echo "tagged with :${tag}"
-
-  # publish
-  if ! on_ci; then
-    echo 'not on CI so not publishing tagged image'
-  else
-    echo 'on CI so publishing tagged image'
-    # DOCKER_USER, DOCKER_PASS are in ci context
-    echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
-    docker push "${image}:latest"
-    docker push "${image}:${tag}"
-    docker logout
-  fi
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-old_build_test_tag_on_ci_publish()
-{
-  local -r scope="${1}"
-  local -r image="$(image_name "${scope}")"
-  local -r names="$(cat "${ROOT_DIR}/start-points/git_repo_urls.${scope}.tagged" | tr '\n' ' ')"
+  local -r names="$(cat "${ROOT_DIR}/git_repo_urls.tagged" | tr '\n' ' ')"
 
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
@@ -129,7 +95,3 @@ on_ci()
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag_on_ci_publish
-
-old_build_test_tag_on_ci_publish small
-old_build_test_tag_on_ci_publish common
-old_build_test_tag_on_ci_publish all
