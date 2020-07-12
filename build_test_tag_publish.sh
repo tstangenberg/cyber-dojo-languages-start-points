@@ -54,7 +54,7 @@ image_name()
 image_sha()
 {
   local -r image="${1}"
-  docker run --rm "${image}" sh -c 'echo ${SHA}'
+  docker run --entrypoint='' --rm "${image}" sh -c 'echo ${SHA}'
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
