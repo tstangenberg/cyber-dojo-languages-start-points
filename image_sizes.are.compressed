@@ -1,0 +1,14 @@
+The line for python_assert:5ad5208 reads
+468784640 cyberdojofoundation/python_assert:5ad5208 447.06 MiB
+
+Whereas
+
+$ docker pull cyberdojofoundation/python_assert:5ad5208
+$ docker image ls | grep 5ad5208
+
+Gives
+
+cyberdojofoundation/python_assert 5ad5208 b64c7473121d 3 weeks ago 1.2GB
+
+So the sizes retreived via a https://hub.docker.com/v2/repositories call
+look wrong. They are compressed sizes.
