@@ -47,4 +47,4 @@ function human_size()
 }
 
 image_sizes "${TMP_DIR}" "${TMP_FILE}" "${ALL_URLS[@]}"
-sort -n -r "${TMP_FILE}" > "${MY_DIR}/../image_sizes.sorted"
+sort -n -r "${TMP_FILE}" > "${MY_DIR}/../compressed.image_sizes.sorted"
