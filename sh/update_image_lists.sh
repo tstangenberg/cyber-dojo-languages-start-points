@@ -1,5 +1,21 @@
 #!/bin/bash -Eeu
 
+readonly MY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.languages-start-points.build.XXXXXX)
+readonly TMP_FILE_1=$(mktemp /tmp/cyber-dojo.languages-start-points.build.XXXXXX)
+readonly TMP_FILE_2=$(mktemp /tmp/cyber-dojo.languages-start-points.build.XXXXXX)
+readonly DOCKERHUB=https://hub.docker.com/v2/repositories
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function remove_tmps()
+{
+   rm -rf "${TMP_DIR}" > /dev/null
+   rm "${TMP_FILE_1}" > /dev/null
+   rm "${TMP_FILE_2}" > /dev/null
+}
+trap remove_tmps EXIT
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/bash-bats
   https://github.com/cyber-dojo-start-points/bash-shunit2
@@ -84,3 +100,59 @@ declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/visual-basic-nunit
   https://github.com/cyber-dojo-start-points/zig-test
 )
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function process_all_urls()
+{
+  for i in "${!ALL_URLS[@]}"
+  do
+    local url="${ALL_URLS[$i]}"            # https://github.com/cyber-dojo-start-points/csharp-nunit
+    local repo_dir="${TMP_DIR}/${i}"
+    git clone "${url}" "${repo_dir}" > /dev/null 2>&1
+    get_tagged_repo_url "${repo_dir}"
+    get_compressed_image_size "${repo_dir}"
+  done
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function get_tagged_repo_url()
+{
+  local -r repo_dir="${1}"
+  local -r sha="$(cd "${repo_dir}" && git rev-parse HEAD)"
+  local -r tag=${sha:0:7}
+  echo "${tag}@${url}" | tee -a "${TMP_FILE_1}"
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function get_compressed_image_size()
+{
+  local -r repo_dir="${1}"
+
+  local image_name=$(cat "${repo_dir}/start_point/manifest.json" | jq --raw-output '.image_name') # cyberdojofoundation/csharp_nunit:32503c4
+  local untagged="$(echo ${image_name} | awk -F: '{print $(NF-1)}')" # cyberdojofoundation/csharp_nunit
+  local tag="$(echo ${image_name} | awk -F: '{print $(NF)}')"        # 32503c4
+
+  local size=$(curl --silent ${DOCKERHUB}/${untagged}/tags/${tag} | jq '.full_size') # 227987976
+  local human=$(human_size "${size}")                                                # 217.42 MiB
+  echo "${size} ${image_name} ${human}" | tee -a "${TMP_FILE_2}"
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+function human_size()
+{
+    local i=${1:-0}
+    local d=""
+    local s=0
+    local S=("Bytes" "KiB" "MiB" "GiB" "TiB" "PiB" "EiB" "YiB" "ZiB")
+    while ((i > 1024 && s < ${#S[@]}-1)); do
+        printf -v d ".%02d" $((i % 1024 * 100 / 1024))
+        i=$((i / 1024))
+        s=$((s + 1))
+    done
+    echo "$i$d ${S[$s]}"
+}
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+process_all_urls
+cp "${TMP_FILE_1}" "${MY_DIR}/../git_repo_urls.tagged"
+sort -n -r "${TMP_FILE_2}" > "${MY_DIR}/../compressed.image_sizes.sorted"
