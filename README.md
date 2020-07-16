@@ -9,7 +9,7 @@
 ***
 
 The preferred way to create a language start-point image is using 'tagged' urls (where the seven
-character url prefix is the first seven characters of a commit sha for the url).
+character url prefix is the first seven characters of a commit sha for the url).  
 Eg
 ```bash
   cyber-dojo start-point create cyberdojo/languages-start-points \
