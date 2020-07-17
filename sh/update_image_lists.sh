@@ -72,6 +72,7 @@ declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/javascript-assert-jquery
   https://github.com/cyber-dojo-start-points/javascript-cucumber
   https://github.com/cyber-dojo-start-points/javascript-jasmine
+  https://github.com/cyber-dojo-start-points/javascript-jest
   https://github.com/cyber-dojo-start-points/javascript-mocha-chai-sinon
   https://github.com/cyber-dojo-start-points/javascript-qunit-sinon
   https://github.com/cyber-dojo-start-points/kotlin-test
