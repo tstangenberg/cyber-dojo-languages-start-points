@@ -38,7 +38,10 @@ workflows:
               only: [ master ]
       - deploy-to-beta:
           context: cyberdojo-context
-          requires: [ build-test-tag-publish ]
+          requires: [ build-test-tag-image ]
+      - approve-to-prod:
+          type: approval
+          requires: [ deploy-to-beta ]
       - deploy-to-prod:
           context: cyberdojo-context
-          requires: [ deploy-to-beta ]
+          requires: [ approve-to-prod ]
