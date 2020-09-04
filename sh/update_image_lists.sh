@@ -97,6 +97,7 @@ declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/rust-test
   https://github.com/cyber-dojo-start-points/swift-swordfish
   https://github.com/cyber-dojo-start-points/swift-xctest
+  https://github.com/cyber-dojo-start-points/typescript-jest  
   https://github.com/cyber-dojo-start-points/vhdl-assert
   https://github.com/cyber-dojo-start-points/visual-basic-nunit
   https://github.com/cyber-dojo-start-points/zig-test
