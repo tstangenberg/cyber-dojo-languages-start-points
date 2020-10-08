@@ -29,11 +29,8 @@ build_test_tag_on_ci_publish()
     echo 'not on CI so not publishing tagged image'
   else
     echo 'on CI so publishing tagged image'
-    # DOCKER_USER, DOCKER_PASS are in ci context
-    echo "${DOCKER_PASS}" | docker login --username "${DOCKER_USER}" --password-stdin
     docker push "${image}:latest"
     docker push "${image}:${tag}"
-    docker logout
   fi
 }
 
