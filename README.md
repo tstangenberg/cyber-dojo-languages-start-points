@@ -2,7 +2,7 @@
 [![CircleCI](https://circleci.com/gh/cyber-dojo/languages-start-points.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages-start-points)
 
 - A docker-containerized micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
-- The data source for the [https://cyber-dojo.org/creator/choose_ltf?type=group](https://cyber-dojo.org/creator/choose_ltf?type=group) page.
+- The data source for the `choose a language & test-framework` page.
 
 <img width="75%" src="https://user-images.githubusercontent.com/252118/97070783-fa349e80-15d2-11eb-85e3-e0a1201be060.png">
 
