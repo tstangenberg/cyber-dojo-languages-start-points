@@ -1,9 +1,13 @@
 
 [![CircleCI](https://circleci.com/gh/cyber-dojo/languages-start-points.svg?style=svg)](https://circleci.com/gh/cyber-dojo/languages-start-points)
 
-- The source for the languages-start-points docker-containerized micro-services for [https://cyber-dojo.org](http://cyber-dojo.org)
+- A docker-containerized micro-service for [https://cyber-dojo.org](http://cyber-dojo.org).
+- The source for the [https://cyber-dojo.org/creator/choose_ltf?type=group](https://cyber-dojo.org/creator/choose_ltf?type=group) page.
+
+<img width="75%" src="https://user-images.githubusercontent.com/252118/97070783-fa349e80-15d2-11eb-85e3-e0a1201be060.png">
+
 - Image is here [cyberdojo/languages-start-points](https://hub.docker.com/r/cyberdojo/languages-start-points/tags)
-- The file [git_repo_urls.tagged](https://github.com/cyber-dojo/languages-start-points/blob/master/git_repo_urls.tagged) lists all the language-test-framework repositories (each one has its own `manifest.json`) included in this image.
+- The file [git_repo_urls.tagged](https://github.com/cyber-dojo/languages-start-points/blob/master/git_repo_urls.tagged) lists all the language-test-framework repositories (each repo one has its own `manifest.json`) included in this image.
 - The file [compressed.image_sizes.sorted](https://github.com/cyber-dojo/languages-start-points/blob/master/compressed.image_sizes.sorted) lists all the images named in these `manifest.json` files, together with their (compressed) sizes, in descending order.
 
 ***
