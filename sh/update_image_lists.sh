@@ -89,6 +89,7 @@ declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/python-pytest
   https://github.com/cyber-dojo-start-points/python-unittest
   https://github.com/cyber-dojo-start-points/r-runit
+  https://github.com/cyber-dojo-start-points/rescript-jest  
   https://github.com/cyber-dojo-start-points/ruby-approval
   https://github.com/cyber-dojo-start-points/ruby-cucumber
   https://github.com/cyber-dojo-start-points/ruby-minitest
@@ -97,7 +98,7 @@ declare -ar ALL_URLS=(
   https://github.com/cyber-dojo-start-points/rust-test
   https://github.com/cyber-dojo-start-points/swift-swordfish
   https://github.com/cyber-dojo-start-points/swift-xctest
-  https://github.com/cyber-dojo-start-points/typescript-jest  
+  https://github.com/cyber-dojo-start-points/typescript-jest
   https://github.com/cyber-dojo-start-points/vhdl-assert
   https://github.com/cyber-dojo-start-points/visual-basic-nunit
   https://github.com/cyber-dojo-start-points/zig-test
