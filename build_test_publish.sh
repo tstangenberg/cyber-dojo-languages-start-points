@@ -20,7 +20,7 @@ build_test_tag()
   unset GIT_COMMIT_SHA
 
   # test
-  local -r image_sha="$(docker run --rm $(image_name) sh -c 'echo ${SHA}'})"
+  local -r image_sha="$(docker run --rm $(image_name) sh -c 'echo ${SHA}')"
   assert_equal "$(git_commit_sha)" "${image_sha}"
 
   # tag
