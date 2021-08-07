@@ -1,0 +1,9 @@
+{
+    "owner": "cyber-dojo",
+    "name": "languages-start-points",
+    "description": "Pipeline Controls for Merkely",
+    "visibility": "public",
+    "template": [
+        "artifact"
+    ]
+}

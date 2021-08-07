@@ -3,6 +3,7 @@
 readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.languages-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
+source "${ROOT_DIR}/sh/merkely.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag_on_ci_publish()
@@ -32,6 +33,7 @@ build_test_tag_on_ci_publish()
     docker push "${image}:latest"
     docker push "${image}:${tag}"
   fi
+
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -91,4 +93,11 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
+merkely_declare_pipeline https://staging.app.merkely.com
+merkely_declare_pipeline https://app.merkely.com
+
 build_test_tag_on_ci_publish
+
+merkely_log_artifact https://staging.app.merkely.com
+merkely_log_artifact https://app.merkely.com
+
