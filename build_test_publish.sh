@@ -17,35 +17,17 @@ build_test_tag()
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
   $(cyber_dojo) start-point create "$(image_name)" --languages "${names}"
-  unset GIT_COMMIT_SH
+  unset GIT_COMMIT_SHA
 
   # test
-  local -r sha="$(image_sha)"
-  assert_equal "$(git_commit_sha)" "${sha}"
+  local -r image_sha="$(docker run --rm $(image_name) sh -c 'echo ${SHA}'})"
+  assert_equal "$(git_commit_sha)" "${image_sha}"
 
   # tag
-  local -r tag="${sha:0:7}"
-  docker tag "$(image_name):latest" "$(image_name):${tag}"
-  echo "tagged with :${tag}"
+  docker tag "$(image_name):latest" "$(image_name):$(git_commit_tag)"
+  echo "tagged with :$(git_commit_tag)"
 }
 
-# - - - - - - - - - - - - - - - - - - - - - - - -
-image_name()
-{
-  echo "${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-git_commit_sha()
-{
-  echo "$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
-image_sha()
-{
-  docker run --entrypoint='' --rm "$(image_name)" sh -c 'echo ${SHA}'
-}
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 assert_equal()
@@ -95,7 +77,7 @@ if on_ci; then
   sha="$(image_sha)"
   tag="${sha:0:7}"
   docker push "$(image_name):latest"
-  docker push "$(image_name):${tag}"
+  docker push "$(image_name):$(git_commit_tag)"
   merkely_log_artifact https://staging.app.merkely.com
   merkely_log_artifact https://app.merkely.com
 fi

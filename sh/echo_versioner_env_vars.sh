@@ -5,28 +5,26 @@ echo_versioner_env_vars()
 {
   docker run --rm cyberdojo/versioner:latest
   #
-  echo CYBER_DOJO_RUNNER_SHA="$(image_sha)"
-  echo CYBER_DOJO_RUNNER_TAG="$(image_tag)"
-  #
-  echo CYBER_DOJO_RUNNER_CLIENT_IMAGE=cyberdojo/runner-client
-  echo CYBER_DOJO_RUNNER_CLIENT_PORT=9999
-  #
-  echo CYBER_DOJO_RUNNER_CLIENT_USER=nobody
-  echo CYBER_DOJO_RUNNER_SERVER_USER=root
-  #
-  echo CYBER_DOJO_RUNNER_CLIENT_CONTAINER_NAME=test_runner_client
-  echo CYBER_DOJO_RUNNER_SERVER_CONTAINER_NAME=test_runner_server
+  echo CYBER_DOJO_LANGUAGES_START_POINTS_SHA="$(git_commit_sha)"
+  echo CYBER_DOJO_LANGUAGES_START_POINTS_TAG="$(git_commit_tag)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_sha()
+git_commit_sha()
 {
   echo "$(cd "${ROOT_DIR}" && git rev-parse HEAD)"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_tag()
+git_commit_tag()
 {
-  local -r sha="$(image_sha)"
+  local -r sha="$(git_commit_sha)"
   echo "${sha:0:7}"
 }
+
+# - - - - - - - - - - - - - - - - - - - - - - - -
+image_name()
+{
+  echo "${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}"
+}
+

@@ -6,6 +6,7 @@ readonly MERKELY_CHANGE=merkely/change:latest
 readonly MERKELY_OWNER=cyber-dojo
 readonly MERKELY_PIPELINE=languages-start-points
 
+
 # - - - - - - - - - - - - - - - - - - -
 merkely_fingerprint()
 {
