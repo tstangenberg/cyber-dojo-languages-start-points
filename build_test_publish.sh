@@ -1,9 +1,12 @@
 #!/bin/bash -Eeu
 
 readonly ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+readonly SH_DIR="${ROOT_DIR}/sha"
 readonly TMP_DIR=$(mktemp -d /tmp/cyber-dojo.languages-start-points.XXXXXXXXX)
 trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
-source "${ROOT_DIR}/sh/merkely.sh"
+source "${SH_DIR}/echo_versioner_env_vars.sh"
+export $(echo_versioner_env_vars)
+source "${SH_DIR}/merkely.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
 build_test_tag()
@@ -29,7 +32,7 @@ build_test_tag()
 # - - - - - - - - - - - - - - - - - - - - - - - -
 image_name()
 {
-  echo cyberdojo/languages-start-points
+  echo "${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}"
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
