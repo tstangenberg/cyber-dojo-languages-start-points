@@ -20,7 +20,7 @@ build_test_tag()
   unset GIT_COMMIT_SHA
 
   # test
-  assert_equal "$(git_commit_sha)" "$(image_sha):"
+  assert_equal "$(git_commit_sha)" "$(image_sha)"
 
   # tag
   docker tag "$(image_name):latest" "$(image_name):$(git_commit_tag)"
