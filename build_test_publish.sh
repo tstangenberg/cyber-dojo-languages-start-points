@@ -6,34 +6,30 @@ trap "rm -rf ${TMP_DIR} > /dev/null" INT EXIT
 source "${ROOT_DIR}/sh/merkely.sh"
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-build_test_tag_on_ci_publish()
+build_test_tag()
 {
   local -r image=cyberdojo/languages-start-points
   local -r names="$(cat "${ROOT_DIR}/git_repo_urls.tagged" | tr '\n' ' ')"
 
   # build
   export GIT_COMMIT_SHA="$(git_commit_sha)"
-  $(cyber_dojo) start-point create "${image}" --languages "${names}"
+  $(cyber_dojo) start-point create "$(image_name)" --languages "${names}"
   unset GIT_COMMIT_SH
 
   # test
-  local -r sha="$(image_sha "${image}")"
+  local -r sha="$(image_sha)"
   assert_equal "$(git_commit_sha)" "${sha}"
 
   # tag
   local -r tag="${sha:0:7}"
-  docker tag "${image}:latest" "${image}:${tag}"
+  docker tag "$(image_name):latest" "$(image_name):${tag}"
   echo "tagged with :${tag}"
+}
 
-  # publish
-  if ! on_ci; then
-    echo 'not on CI so not publishing tagged image'
-  else
-    echo 'on CI so publishing tagged image'
-    docker push "${image}:latest"
-    docker push "${image}:${tag}"
-  fi
-
+# - - - - - - - - - - - - - - - - - - - - - - - -
+image_name()
+{
+  echo cyberdojo/languages-start-points
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -43,17 +39,9 @@ git_commit_sha()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-image_name()
-{
-  local -r scope="${1}"
-  echo "cyberdojo/languages-start-points-${scope}"
-}
-
-# - - - - - - - - - - - - - - - - - - - - - - - -
 image_sha()
 {
-  local -r image="${1}"
-  docker run --entrypoint='' --rm "${image}" sh -c 'echo ${SHA}'
+  docker run --entrypoint='' --rm "$(image_name)" sh -c 'echo ${SHA}'
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
@@ -93,11 +81,19 @@ on_ci()
 }
 
 # - - - - - - - - - - - - - - - - - - - - - - - -
-merkely_declare_pipeline https://staging.app.merkely.com
-merkely_declare_pipeline https://app.merkely.com
+if on_ci; then
+  merkely_declare_pipeline https://staging.app.merkely.com
+  merkely_declare_pipeline https://app.merkely.com
+fi
 
-build_test_tag_on_ci_publish
+build_test_tag
 
-merkely_log_artifact https://staging.app.merkely.com
-merkely_log_artifact https://app.merkely.com
+if on_ci; then
+  sha="$(image_sha)"
+  tag="${sha:0:7}"
+  docker push "$(image_name):latest"
+  docker push "$(image_name):${tag}"
+  merkely_log_artifact https://staging.app.merkely.com
+  merkely_log_artifact https://app.merkely.com
+fi
 

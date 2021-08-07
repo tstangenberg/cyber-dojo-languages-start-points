@@ -9,7 +9,7 @@ readonly MERKELY_PIPELINE=languages-start-points
 # - - - - - - - - - - - - - - - - - - -
 merkely_fingerprint()
 {
-  echo "docker://${CYBER_DOJO_RUNNER_IMAGE}:${CYBER_DOJO_RUNNER_TAG}"
+  echo "docker://${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}:${CYBER_DOJO_LANGUAGES_START_POINTS_TAG}"
 }
 
 # - - - - - - - - - - - - - - - - - - -
