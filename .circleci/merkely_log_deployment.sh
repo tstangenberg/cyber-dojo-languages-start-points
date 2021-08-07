@@ -20,7 +20,7 @@ merkely_log_deployment()
 
   VERSIONER_URL=https://raw.githubusercontent.com/cyber-dojo/versioner/master
   export $(curl "${VERSIONER_URL}/app/.env")
-  export CYBER_DOJO_RUNNER_TAG="${CIRCLE_SHA1:0:7}"
+  export CYBER_DOJO_LANGUAGES_START_POINT_TAG="${CIRCLE_SHA1:0:7}"
   docker pull ${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}:${CYBER_DOJO_LANGUAGES_START_POINTS_TAG}
 
 	docker run \
