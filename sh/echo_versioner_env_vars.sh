@@ -28,3 +28,9 @@ image_name()
   echo "${CYBER_DOJO_LANGUAGES_START_POINTS_IMAGE}"
 }
 
+# - - - - - - - - - - - - - - - - - - - - - - - -
+image_sha()
+{
+  docker run --rm $(image_name) sh -c 'echo ${SHA}'
+}
+

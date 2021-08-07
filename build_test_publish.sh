@@ -20,8 +20,7 @@ build_test_tag()
   unset GIT_COMMIT_SHA
 
   # test
-  local -r image_sha="$(docker run --rm $(image_name) sh -c 'echo ${SHA}')"
-  assert_equal "$(git_commit_sha)" "${image_sha}"
+  assert_equal "$(git_commit_sha)" "$(image_sha):"
 
   # tag
   docker tag "$(image_name):latest" "$(image_name):$(git_commit_tag)"
@@ -74,8 +73,6 @@ fi
 build_test_tag
 
 if on_ci; then
-  sha="$(image_sha)"
-  tag="${sha:0:7}"
   docker push "$(image_name):latest"
   docker push "$(image_name):$(git_commit_tag)"
   merkely_log_artifact https://staging.app.merkely.com
