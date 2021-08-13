@@ -1,7 +1,7 @@
 {
     "owner": "cyber-dojo",
     "name": "languages-start-points",
-    "description": "Pipeline Controls for Merkely",
+    "description": "Microservice for Language+TestFramework choices",
     "visibility": "public",
     "template": [
         "artifact"
